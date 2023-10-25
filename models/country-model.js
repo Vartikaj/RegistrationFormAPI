@@ -1,11 +1,10 @@
 const dependencies = require('../dependencies');
 const uniqueValidator = dependencies.uniqueValidator;
-
 const mongoose = dependencies.mongoose;
-const Schema = mongoose.Schema;
 
-const stateModel = new Schema({
-    countryCode : {
+const Schema = mongoose.Schema;
+const countryModel = new Schema({
+    code : {
         type: String,
         maxLength: [10, 'country Code must be 10 character long'],
         trim: true,
@@ -14,10 +13,14 @@ const stateModel = new Schema({
     },
     name: {
         type: String,
-        maxLength: [20, 'Country name must be 20 characters long'],
+        maxLength: [100, 'Country name must be 20 characters long'],
         trim: true,
         require: true
     }
 });
 
-stateModel.plugin(uniqueValidator, { message: '{PATH} : {VALUE} is already exists!!!' });
+countryModel.plugin(uniqueValidator, { message: '{PATH} : {VALUE} is already exists!!!' });
+
+const countryModelData = mongoose.model('country', countryModel);
+
+module.exports = countryModelData;
