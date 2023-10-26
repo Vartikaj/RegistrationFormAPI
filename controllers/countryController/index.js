@@ -10,18 +10,25 @@ const readFile = util.promisify(fs.readFile);
 exports.getInsertData = asyncHandler(async(req,res,next) => {
     try{
         let result = await readFile("./controllers/countryController/country.json", "utf8");
-        
-        const importedData = JSON.parse(result);
-        var sizeOfArray = importedData.length;
-        console.log("Size of : " + sizeOfArray);
+        const fileData = JSON.parse(result);
         var countryCode = await path.find();
-        var stringData = JSON.stringify(countryCode);
-        console.log(stringData);
-        await path.insertMany(importedData);
-        
+        for(let datafile of fileData){
+            try {
+                const presentData = await path.findOne({"code": datafile.code}).exec();
+                if (presentData) {
+                    await fs.promises.appendFile('country-log.txt', datafile.code);
+                    console.log('already present');
+                } else {
+                    await path.insertMany(datafile);
+                    console.log('Data entered!!!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
         res.status(200).json({
             success: true,
-            data: 'data successfully imported'
+            data: 'data successfully file'
         })
         next();
     } catch (error) {
