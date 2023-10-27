@@ -38,3 +38,27 @@ exports.getInsertData = asyncHandler(async(req,res,next) => {
         })
     }
 })
+
+
+//GET THE LIST OF COUNTRY DATA
+exports.getListOfData = asyncHandler(async(req, res, next) => {
+    try {
+        const getData = await path.find().exec();
+        if(getData){
+            console.log(getData);
+        }
+        res.status(200).json({
+            success: true,
+            data: getData
+        })
+        next();
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            data: error.message
+        })
+    }
+})
+//=============================
+
+

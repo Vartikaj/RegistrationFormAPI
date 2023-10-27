@@ -1,5 +1,4 @@
 const dependencies = require('../dependencies');
-
 const mongoose = dependencies.mongoose;
 const validatorPackage = dependencies.validatorPackage;
 
@@ -81,5 +80,4 @@ registrationForm.plugin(uniqueValidator, {message: '{PATH} : {VALUE} is already 
 const registrationFormModel = mongoose.model('registrationForm', registrationForm);
 
 module.exports = registrationFormModel;
-
 

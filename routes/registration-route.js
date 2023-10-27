@@ -1,11 +1,12 @@
 const dependencies = require('../dependencies');
-
-const express = dependencies.express;
 const router = dependencies.router;
-
 const {
     //HERE WE PASS THE FUNCTION NAME
+    getRegistrationData
 
 } = require('../controllers/registration-controller');
 
-router.route().post();
+router.route('/getRegistrationData').get(getRegistrationData);
+
+
+module.exports = router;
