@@ -25,13 +25,13 @@ const addressSchema = new Schema({
 
     },
     state:{
-        type: Number,
+        type: String,
         required: true,
         trim: true,
         maxLength: [25, 'State must be 25 characters long']
     },
     city:{
-        type: Number,
+        type: String,
         required: true,
         trim: true,
         maxLength: [25, 'City must be 25 characters long']

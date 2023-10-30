@@ -17,10 +17,8 @@ exports.getInsertData = asyncHandler(async(req,res,next) => {
                 const presentData = await path.findOne({"code": datafile.code}).exec();
                 if (presentData) {
                     await fs.promises.appendFile('country-log.txt', datafile.code);
-                    console.log('already present');
                 } else {
                     await path.insertMany(datafile);
-                    console.log('Data entered!!!');
                 }
             } catch (error) {
                 console.error('Error:', error);
