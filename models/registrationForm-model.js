@@ -58,7 +58,7 @@ const registrationForm = new Schema({
     username: {
         type: String,
         maxLength: [50, 'Username must be 50 character long'],
-        match: [/^[A-Za-z .]+$/, "Username must contain letters (upper or lower case), space or dot operator"],
+        match: [/^[A-Za-z0-9 .]+$/, "Username must contain letters (upper or lower case), space or dot operator"],
         trim: true,
     },
     addmissionno : {
