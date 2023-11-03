@@ -21,21 +21,13 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
         console.log(checkData);
 
         if (!checkData) {
-            await registrationForm.create(req.body)
-                .then(result => {
-                    res.status(200).json({
-                        success: true,
-                        mesgcode: 1,
-                        mesgtext: 'Insertion successful'
-                    });
-                })
-                .catch(error => {
-                    res.status(200).json({
-                        success: true,
-                        mesgcode: 2,
-                        mesgtext: 'Error during insertion'
-                    });
-                });
+            const regData = await registrationForm(req.body);
+            const insertData = await regData.save();
+            res.status(200).json({
+                success: true,
+                mesgcode: 1,
+                mesgtext: insertData
+            });
         } else {
             if (checkData.username == req.body.username) {
                 res.status(200).json({

@@ -3,7 +3,7 @@ const router = dependencies.router;
 const {
     findDataFromDatabase
 } = require('../controllers/dashboard-controller');
-
-router.route('/findDataFromDatabase').post(findDataFromDatabase);
+const verifyToken = require('../middleware/verifyToken.middleware');
+router.route('/findDataFromDatabase').get(verifyToken,findDataFromDatabase);
 
 module.exports = router;
