@@ -45,9 +45,7 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
                     mesgcode: 5
                 });
             }
-
         }
-
     } catch (error) {
         res.status(400).json({
             success: false,

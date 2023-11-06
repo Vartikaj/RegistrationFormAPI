@@ -26,8 +26,8 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
                     mesgcode : 1,
                     mesgtext : req.body,
                     data : contentData,
-                    tokn
-
+                    token: token,
+                    id : contentData._id
                 });
             } else {
                 res.status(200).json({

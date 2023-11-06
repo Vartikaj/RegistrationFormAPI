@@ -4,7 +4,9 @@ const registrationForm = require('../models/registrationForm-model');
 
 const verifyToken = async(req, res, next) => {
     try {
+        console.log("req data : " + req.body);
         const token = req.cookies.token;
+        console.log("service token : " + token);
         const clientToken = req.headers.authorization;
         console.log("Token : " + token);
         console.log("Client Token : " + clientToken);
@@ -20,8 +22,7 @@ const verifyToken = async(req, res, next) => {
             next();
         }
     } catch (error) {
-        res.status(401).json({message : error.message});
+        res.status(401).json({message : error.message});  
     }
 };
-
 module.exports = verifyToken;
