@@ -13,12 +13,15 @@ const verifyToken = async(req, res, next) => {
         if(token != clientToken){
             res.status(401).json({message : "Token is not correct from client side"});
         } else {
-            const user = await registrationForm.findByToken(token);
+            const user = await registrationForm.findByToken({token : req.token}).exec();
             if(!user){
                 throw new Error("Unauthorized!!");
             }
 
-            req.user = user;
+            res.json({
+                type: true,
+                data : user
+            });
             next();
         }
     } catch (error) {

@@ -111,10 +111,12 @@ registrationForm.methods.generateAuthToken = function() {
 
 registrationForm.statics.findByToken = async function(token) {
     try{
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded);
         return await this.findOne({ _id : decoded._id});
     } catch (error) {
-        throw new Error(`Error verifying token: ${err.message}`);
+        return error.message;
     }
 }
 
