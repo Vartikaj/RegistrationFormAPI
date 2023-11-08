@@ -11,20 +11,21 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
         const contentData = await registrationForm.findOne({username : req.body.username});
         const isMatch = await contentData.comparePassword(password);
         if(!isMatch){
-            return res.status(401).json({message: 'Invalid username or password'})
+            res.status(200).json({
+                success: false,
+                mesgcode: 2,
+                message: 'Incorrect Password'
+            })
         } else {
-            console.log(contentData);
             if(contentData) {
                 const token = contentData.generateAuthToken();
                 console.log(token);
                 await contentData.incrementLoginCount();
-
                 res.cookie('token', token, {httpOnly : true, sameSite: 'strict', secure: false});
-
                 res.status(200).json({
                     success : true,
                     mesgcode : 1,
-                    mesgtext : req.body,
+                    message : 'Successfully Login',
                     data : contentData,
                     token: token,
                     id : contentData._id
@@ -33,7 +34,7 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
                 res.status(200).json({
                     success : false,
                     mesgcode : 2,
-                    mesgtext : 'Kindly check username' 
+                    message : 'Kindly check username' 
                 });
             }
         }

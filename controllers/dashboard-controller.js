@@ -6,7 +6,7 @@ const registrationForm = require('../models/registrationForm-model');
 
 exports.findDataFromDatabase = asyncHandler(async(req,res,next) => {
     try{
-        const idData = req.user;
+        const idData = req;
         console.log(idData);
         const findValue = await registrationForm.findOne({ _id : idData, });
         console.log("find value data" + findValue);
@@ -14,7 +14,8 @@ exports.findDataFromDatabase = asyncHandler(async(req,res,next) => {
             res.status(200).json({
                 success: true,
                 mesgcode: 1,
-                mesgtext: findValue
+                mesgtext: findValue,
+                token: req.token,
             });
         } else {
             res.status(200).json({

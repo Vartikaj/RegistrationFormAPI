@@ -104,14 +104,20 @@ registrationForm.methods.comparePassword = function(password) {
 }
 
 //GENERATE A JWT TOKEN
-registrationForm.methods.generateAuthToken = function() {
-    const token = jwt.sign({_id : this._id}, process.env.JWT_SECRET, { expiresIn : 5000 });
-    return token;
+registrationForm.methods.generateAuthToken = async function() {
+    try{
+        // console.log("_id : " + this._id);
+        const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: 5000 });
+        console.log("tokens : " + token);
+        return token;
+    } catch (error) {
+        res.send("Error while generating token : " + error);
+        console.log("the error part");
+    }
 }
 
 registrationForm.statics.findByToken = async function(token) {
     try{
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log(decoded);
         return await this.findOne({ _id : decoded._id});

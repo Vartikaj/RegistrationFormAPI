@@ -4,7 +4,7 @@ const registrationForm = require('../models/registrationForm-model');
 
 const verifyToken = async(req, res, next) => {
     try {
-        console.log("req data : " + req.body);
+        console.log("req data : " + req);
         const token = req.cookies.token;
         console.log("service token : " + token);
         const clientToken = req.headers.authorization;
@@ -13,7 +13,7 @@ const verifyToken = async(req, res, next) => {
         if(token != clientToken){
             res.status(401).json({message : "Token is not correct from client side"});
         } else {
-            const user = await registrationForm.findByToken({token : req.token}).exec();
+            const user = await registrationForm.findByToken({token : req.token});
             if(!user){
                 throw new Error("Unauthorized!!");
             }

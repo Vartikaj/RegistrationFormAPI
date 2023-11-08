@@ -18,10 +18,14 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
                 {addmissionno : req.body.addmissionno}
             ]
         });
-        console.log(checkData);
 
         if (!checkData) {
             const regData = await registrationForm(req.body);
+            console.log(regData);
+            //GENERATE TOKEN
+            const token = await registrationForm.generateAuthToken();
+            console.log("Token : " + token);
+
             const insertData = await regData.save();
             res.status(200).json({
                 success: true,
