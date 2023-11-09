@@ -6,12 +6,17 @@ const dependencies = require('../dependencies');
 const registrationForm = require('../models/registrationForm-model');
 const uniqueValidator = dependencies.uniqueValidator;
 
+
 //=============FOR FORM SUBMISSION==============
 exports.postRegistrationData = asyncHandler(async (req, res, next) => {
     try {
         /**
          * FIRST CHECK USERNAME OR ADMISSION NO. IS ALREADY EXIST OR NOT
          */
+        console.log(req);
+        console.log(req.body.username);
+        console.log(req.body.addmissionno);
+
         const checkData = await registrationForm.findOne({
             $or:[
                 {username : req.body.username},
@@ -21,16 +26,12 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
 
         if (!checkData) {
             const regData = await registrationForm(req.body);
-            console.log(regData);
-            //GENERATE TOKEN
-            const token = await registrationForm.generateAuthToken();
-            console.log("Token : " + token);
-
+            const token = await regData.generateAuthToken();
             const insertData = await regData.save();
             res.status(200).json({
                 success: true,
                 mesgcode: 1,
-                mesgtext: insertData
+                mesgtext: "Data Inserted!!"
             });
         } else {
             if (checkData.username == req.body.username) {
@@ -54,7 +55,7 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
         res.status(400).json({
             success: false,
             mesgcode: 0,
-            mesgtext: 'Something wrong'
+            mesgtext: 'Error Something wrong'
         });
     }
 });

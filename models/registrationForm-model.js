@@ -11,6 +11,13 @@ const jwt = dependencies.jwt;
 //THIS WE DONE BECAUSE WE WANT TO CALL SCHEMA INSIDE ANOTHER SCHEMA
 const Schema = mongoose.Schema;
 
+const token = new Schema({
+    token: {
+        type: String,
+        required: true
+    }
+});
+
 const addressSchema = new Schema({
     streetAddress : {
         type: String,
@@ -77,11 +84,12 @@ const registrationForm = new Schema({
         match: [/\d{10}/,"Addmission number should only have digits'"],
         minLength: [10,"Addmission number have maximum 10 digits"],
         trim: true,
-        require: true,
+        required: true,
         index: true,
         unique: true
     },
     address: [addressSchema],
+    tokens: [token],
     isActive: Boolean,
 });
 
@@ -106,9 +114,9 @@ registrationForm.methods.comparePassword = function(password) {
 //GENERATE A JWT TOKEN
 registrationForm.methods.generateAuthToken = async function() {
     try{
-        // console.log("_id : " + this._id);
-        const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: 5000 });
-        console.log("tokens : " + token);
+        const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+        this.tokens = this.tokens.concat({token: token});
+        await this.save();
         return token;
     } catch (error) {
         res.send("Error while generating token : " + error);
