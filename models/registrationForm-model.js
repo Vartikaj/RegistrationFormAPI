@@ -104,7 +104,6 @@ registrationForm.pre('save', async function(){
     }
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
-    console.log(user.password);
 })
 
 registrationForm.methods.comparePassword = function(password) {
@@ -114,7 +113,8 @@ registrationForm.methods.comparePassword = function(password) {
 //GENERATE A JWT TOKEN
 registrationForm.methods.generateAuthToken = async function() {
     try{
-        const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
+        console.log(token);
         this.tokens = this.tokens.concat({token: token});
         await this.save();
         return token;
@@ -127,7 +127,6 @@ registrationForm.methods.generateAuthToken = async function() {
 registrationForm.statics.findByToken = async function(token) {
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decoded);
         return await this.findOne({ _id : decoded._id});
     } catch (error) {
         return error.message;
@@ -138,6 +137,7 @@ registrationForm.statics.findByToken = async function(token) {
 //INCREMENT LOGIN COUNT WHEN USER LOGS IN
 registrationForm.methods.incrementLoginCount = async function() {
     this.loginCount += 1;
+    ("Login count : " + this.loginCount);
     return await this.save();
 }
 //=======================================

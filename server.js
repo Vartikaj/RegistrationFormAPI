@@ -13,6 +13,7 @@ const dbConnection = require('./dbconnection/connection');
 const routeApi = require('./routes/index');
 const helmet = require('helmet');
 const cors = require('cors');
+const auth = require('./middleware/auth.middleware');
 
 app.use(cors());
 /**

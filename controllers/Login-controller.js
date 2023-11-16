@@ -18,10 +18,17 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
             })
         } else {
             if(contentData) {
-                const token = contentData.generateAuthToken();
-                console.log(token);
+                const token = await contentData.generateAuthToken();
+
+                // res.cookie('token', token, {
+                //     httpOnly : true, 
+                //     //sameSite: 'strict', 
+                //     //secure: true, 
+                //     expires: new Date(Date.now() + 600000)
+                // });
+                
                 await contentData.incrementLoginCount();
-                res.cookie('token', token, {httpOnly : true, sameSite: 'strict', secure: false});
+                // res.cookie('token', token, {httpOnly : true, sameSite: 'strict', secure: false});
                 res.status(200).json({
                     success : true,
                     mesgcode : 1,

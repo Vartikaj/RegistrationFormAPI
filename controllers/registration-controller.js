@@ -10,12 +10,6 @@ const uniqueValidator = dependencies.uniqueValidator;
 //=============FOR FORM SUBMISSION==============
 exports.postRegistrationData = asyncHandler(async (req, res, next) => {
     try {
-        /**
-         * FIRST CHECK USERNAME OR ADMISSION NO. IS ALREADY EXIST OR NOT
-         */
-        console.log(req);
-        console.log(req.body.username);
-        console.log(req.body.addmissionno);
 
         const checkData = await registrationForm.findOne({
             $or:[
@@ -23,11 +17,20 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
                 {addmissionno : req.body.addmissionno}
             ]
         });
+        
 
         if (!checkData) {
             const regData = await registrationForm(req.body);
             const token = await regData.generateAuthToken();
-            const insertData = await regData.save();
+            res.cookie('token', token, {
+                httpOnly : true, 
+                sameSite: 'strict', 
+                //secure: true, 
+                expires: new Date(Date.now() + 30000)
+            });
+            
+
+            await regData.save();
             res.status(200).json({
                 success: true,
                 mesgcode: 1,
@@ -55,7 +58,7 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
         res.status(400).json({
             success: false,
             mesgcode: 0,
-            mesgtext: 'Error Something wrong'
+            mesgtext: error.message
         });
     }
 });
