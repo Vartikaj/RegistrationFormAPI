@@ -4,24 +4,21 @@ const registrationForm = require('../models/registrationForm-model');
 
 const verifyToken = async(req, res, next) => {
     try {
+        const clientToken = req.headers['authorization'];
+        // if(!clientToken){
+        //     return res.status(403).json({message : 'No Token Provided'});
+        // }
 
-        // // const token = req.cookies.token;
-        // // console.log(`Token : ${token}`);
-        const clientToken = req.headers;
-        console.log(`ClientToken : ${clientToken}`);
-        // // if(clientToken){
-        // //     res.status(401).json({message : "Token is not correct from client side"});
-        // // } else {
-        //     const user = await registrationForm.findByToken({token : req.token});
-        //     if(!user){
-        //         throw new Error("Unauthorized!!");
+        // jwt.verify(clientToken, req.token, (error, decoded) => {
+        //     if(error) { 
+        //         return res.status(401).json({
+        //             message : 'Failed to authenticate token'
+        //         });
         //     }
 
-        //     res.json({
-        //         type: true,
-        //         data : user
-        //     });
-        // // }
+        //     req.decoded = decoded;
+        //     next();
+        // })
     } catch (error) {
         res.status(401).json({message : error.message});  
     }

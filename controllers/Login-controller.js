@@ -14,7 +14,7 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
             res.status(200).json({
                 success: false,
                 mesgcode: 2,
-                message: 'Incorrect Password'
+                message: 'Incorrect data!!'
             })
         } else {
             if(contentData) {
@@ -24,10 +24,10 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
                 //     httpOnly : true, 
                 //     //sameSite: 'strict', 
                 //     //secure: true, 
-                //     expires: new Date(Date.now() + 600000)
+                //     //eexpires: new Date(Date.now() + 60000)
                 // });
                 
-                await contentData.incrementLoginCount();
+                // await contentData.incrementLoginCount();
                 // res.cookie('token', token, {httpOnly : true, sameSite: 'strict', secure: false});
                 res.status(200).json({
                     success : true,
@@ -46,10 +46,11 @@ exports.postLoginData = asyncHandler(async(req, res, next) => {
             }
         }
     } catch (error){
-        res.status(400).json({
+        res.status(200).json({
             sucess: false,
-            mesgcode: error.message,
-            mesgtext: 'Something wrong'
+            //mesgcode: error.message,
+            message: 'Something wrong',
+            mesgcode : 2,
         });
         next(error);
     }

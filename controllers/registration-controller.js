@@ -22,12 +22,12 @@ exports.postRegistrationData = asyncHandler(async (req, res, next) => {
         if (!checkData) {
             const regData = await registrationForm(req.body);
             const token = await regData.generateAuthToken();
-            res.cookie('token', token, {
-                httpOnly : true, 
-                sameSite: 'strict', 
-                //secure: true, 
-                expires: new Date(Date.now() + 30000)
-            });
+            // res.cookie('token', token, {
+            //     httpOnly : true, 
+            //     sameSite: 'strict', 
+            //     //secure: true, 
+            //     expires: new Date(Date.now() + 30000)
+            // });
             
 
             await regData.save();
