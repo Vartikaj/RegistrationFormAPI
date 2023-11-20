@@ -6,10 +6,10 @@ const registrationForm = require('../models/registrationForm-model');
 
 exports.findDataFromDatabase = asyncHandler(async(req,res,next) => {
     try{
-        const idData = req.body;
+        const idData = req.decoded._id;
         console.log(idData);
-        //const findValue = await registrationForm.findOne({ _id : idData, });
-        const findValue = true;
+        const findValue = await registrationForm.findOne({ _id : idData });
+        console.log(findValue);
         if(findValue){
             res.status(200).json({
                 success: true,
@@ -31,6 +31,5 @@ exports.findDataFromDatabase = asyncHandler(async(req,res,next) => {
             mesgcode: 1,
             mesgtext: error.message,
         })
-        
     }
 })

@@ -89,7 +89,6 @@ const registrationForm = new Schema({
         unique: true
     },
     address: [addressSchema],
-    tokens: [token],
     isActive: Boolean,
 });
 
@@ -113,9 +112,11 @@ registrationForm.methods.comparePassword = function(password) {
 //GENERATE A JWT TOKEN
 registrationForm.methods.generateAuthToken = async function() {
     try{
-        const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET, {expiresIn : 60});
-        this.tokens = this.tokens.concat({token: token});
-        await this.save();
+        const payload = {
+            _id :  this._id.toString(),
+            exp : Math.floor(Date.now() / 1000) + 60,
+        };
+        const token = jwt.sign(payload, process.env.JWT_SECRET);
         return token;
     } catch (error) {
         res.send("Error while generating token : " + error);
