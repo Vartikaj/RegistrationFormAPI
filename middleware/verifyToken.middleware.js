@@ -9,13 +9,17 @@ const verifyToken = async(req, res, next) => {
         const clientToken = req.headers['authorization'];
         
         if(!clientToken){
-            return res.status(403).json({message : 'No Token Provided'});
+            return res.status(403).json({
+                message : 'No Token Provided',
+                mesgcode: 2
+            });
         }
 
         jwt.verify(clientToken.split(' ')[1], process.env.JWT_SECRET, (error, decoded) => {
             if(error) { 
-                return res.status(401).json({
-                    message : 'Failed to authenticate token'
+                return res.status(200).json({
+                    message : 'Failed to authenticate token',
+                    mesgcode: 2
                 });
             }
 
@@ -24,7 +28,10 @@ const verifyToken = async(req, res, next) => {
             next();
         })
     } catch (error) {
-        res.status(401).json({message : error.message});  
+        return res.status(401).json({
+            message : error.message,
+            mesgcode: 2
+        });  
     }
 };
 module.exports = verifyToken;
