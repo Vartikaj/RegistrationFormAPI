@@ -7,6 +7,7 @@ const uniqueValidator = dependencies.uniqueValidator;
 const bcrypt = dependencies.bcrypt;
 const rateLimit = dependencies.rateLimit;
 const jwt = dependencies.jwt;
+const cipher = dependencies.cipher;
 
 //THIS WE DONE BECAUSE WE WANT TO CALL SCHEMA INSIDE ANOTHER SCHEMA
 const Schema = mongoose.Schema;
@@ -112,15 +113,21 @@ registrationForm.methods.comparePassword = function(password) {
 //GENERATE A JWT TOKEN
 registrationForm.methods.generateAuthToken = async function() {
     try{
+        // output encoding
+        let encryptedData = cipher.update(this._id.toString(), "utf-8", "hex");
+        encryptedData += cipher.final("hex");
+        console.log("encrypted Data : " + encryptedData);
         const payload = {
-            _id :  this._id.toString(),
+            _id :  encryptedData,
             exp : Math.floor(Date.now() / 1000) + 60,
         };
+        
         const token = jwt.sign(payload, process.env.JWT_SECRET);
+        console.log("Token value : " + token);
         return token;
     } catch (error) {
-        res.send("Error while generating token : " + error);
-        console.log("the error part");
+        //res.send("Error while generating token : " + error);
+        console.log("the error part : "  + error);
     }
 }
 

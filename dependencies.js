@@ -8,8 +8,17 @@ const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const algorithm = "aes-256-cbc"; 
 
+// generate 16 bytes of random data
+const initVector = crypto.randomBytes(16);
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.randomBytes(32);
 
+// the cipher function
+const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
 
 module.exports = {
     mongoose : mongoose,
@@ -20,4 +29,6 @@ module.exports = {
     bcrypt : bcrypt,
     rateLimit : rateLimit,
     jwt : jwt,
+    cipher:cipher,
+    decipher:decipher,
 };
